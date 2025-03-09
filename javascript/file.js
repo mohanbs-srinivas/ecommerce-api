@@ -1,4 +1,4 @@
-function add(a, b) {
+async function add(a, b) {
   return a + b;
 }
 
@@ -12,7 +12,7 @@ async function divide(a, b) {
   }
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(a * b);
+      resolve(a * b); 
     }, 1000);
   });
 }
@@ -21,7 +21,7 @@ function subtract(a, b) {
   return a - b;
 }
 
-console.log("Addition result:", add(5, 3));
+console.log("Addition result:", await add(5, 3)); 
 
 divide(10, 2)
   .then((result) => console.log("Division result:", result))
