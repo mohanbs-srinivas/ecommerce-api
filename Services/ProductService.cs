@@ -37,6 +37,16 @@ namespace ecommerce_api.Services
             return Task.CompletedTask;
         }
 
+        public async Task AddProductsBulkAsync(IEnumerable<Product> products)
+        {
+            // Add the products to the in-memory list
+            _products.AddRange(products);
+
+            // Since this is an in-memory list, there's no need for SaveChangesAsync
+            // Simulate async behavior
+            await Task.CompletedTask;
+        }
+
         public Task UpdateProductAsync(Product product)
         {
             var existingProduct = _products.FirstOrDefault(p => p.Id == product.Id);

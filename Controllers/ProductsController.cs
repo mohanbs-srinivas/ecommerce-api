@@ -43,6 +43,18 @@ namespace ecommerce_api.Controllers
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
 
+        [HttpPost("bulk")]
+        public async Task<IActionResult> CreateProductsBulk(IEnumerable<Product> products)
+        {
+            if (products == null || !products.Any())
+            {
+                return BadRequest("Product list cannot be empty.");
+            }
+
+            await _productService.AddProductsBulkAsync(products);
+            return Ok(new { Message = $"{products.Count()} products added successfully." });
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, Product product)
         {
