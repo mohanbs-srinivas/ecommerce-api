@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using AdvancedSecurity.Helpers;
+using ecommerce_api.Helpers;
 using System;
 using Microsoft.AspNetCore.Authentication;
-using static AdvancedSecurity.Models.UserDetails;
+using static ecommerce_api.Models.UserDetails;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net;
 using System.Text;
 using System.Web;
 
-namespace AdvancedSecurity.Controllers
+namespace ecommerce_api.Controllers
 {
     public class AccountController : Controller
     {
