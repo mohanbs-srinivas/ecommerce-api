@@ -24,10 +24,12 @@ public class Program
                     {
                         c.SwaggerDoc("v1", new OpenApiInfo { Title = "E-commerce API", Version = "v1" });
                     });
+                    services.AddHttpClient();
                     services.AddSingleton<CustomerService>();
                     services.AddSingleton<OrderService>();
                     services.AddSingleton<OrderDetailService>();
                     services.AddSingleton<ProductService>();
+                    services.AddScoped<RepositoryInfoService>();
                 });
                 webBuilder.Configure((context, app) =>
                 {

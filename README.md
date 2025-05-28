@@ -56,6 +56,50 @@ http://localhost:5000/swagger
 
 The application includes a `MockDataInitializer` class that seeds the database with mock data for testing purposes. This can be useful for development and testing without needing a real database setup.
 
+## Repository Info Endpoints
+
+The API includes endpoints to retrieve information about GitHub repositories:
+
+### GET /api/repositoryinfo/branches
+Returns the list of branch names for a specified repository.
+
+**Parameters:**
+- `owner` (required): The repository owner (username or organization)
+- `repo` (required): The repository name
+
+**Example:**
+```
+GET /api/repositoryinfo/branches?owner=microsoft&repo=vscode
+```
+
+### GET /api/repositoryinfo/commits/count
+Returns the total number of commits in the main branch of a specified repository.
+
+**Parameters:**
+- `owner` (required): The repository owner (username or organization)
+- `repo` (required): The repository name
+
+**Example:**
+```
+GET /api/repositoryinfo/commits/count?owner=microsoft&repo=vscode
+```
+
+### GET /api/repositoryinfo/collaborators
+Returns the list of collaborator login names for a specified repository.
+
+**Parameters:**
+- `owner` (required): The repository owner (username or organization)
+- `repo` (required): The repository name
+
+**Example:**
+```
+GET /api/repositoryinfo/collaborators?owner=microsoft&repo=vscode
+```
+
+### GitHub API Token
+
+For higher rate limits, you can provide a GitHub API token by setting the `GITHUB_API_TOKEN` environment variable. The token will be used as a Bearer token in requests to the GitHub API.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
