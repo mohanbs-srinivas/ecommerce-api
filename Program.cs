@@ -1,10 +1,13 @@
 using ecommerce_api.Data;
 using ecommerce_api.Services;
+using ecommerce_api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 public class Program
 {
@@ -19,6 +22,28 @@ public class Program
             {
                 webBuilder.ConfigureServices((context, services) =>
                 {
+                    // Add Entity Framework and Identity
+                    services.AddDbContext<EcommerceContext>(options =>
+                        options.UseInMemoryDatabase("EcommerceDb"));
+
+                    services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+                    {
+                        // Password settings
+                        options.Password.RequireDigit = true;
+                        options.Password.RequiredLength = 8;
+                        options.Password.RequireNonAlphanumeric = true;
+                        options.Password.RequireUppercase = true;
+                        options.Password.RequireLowercase = true;
+                        
+                        // User settings
+                        options.User.RequireUniqueEmail = true;
+                        
+                        // Email confirmation
+                        options.SignIn.RequireConfirmedEmail = true;
+                    })
+                    .AddEntityFrameworkStores<EcommerceContext>()
+                    .AddDefaultTokenProviders();
+
                     services.AddControllers();
                     services.AddSwaggerGen(c =>
                     {
@@ -36,17 +61,28 @@ public class Program
                     {
                         app.UseDeveloperExceptionPage();
                     }
+                    
                     app.UseRouting();
+                    app.UseAuthentication();
                     app.UseAuthorization();
                     app.UseEndpoints(endpoints =>
                     {
                         endpoints.MapControllers();
                     });
-                    var customerService = app.ApplicationServices.GetRequiredService<CustomerService>();
-                    var orderService = app.ApplicationServices.GetRequiredService<OrderService>();
-                    var orderDetailService = app.ApplicationServices.GetRequiredService<OrderDetailService>();
-                    var productService = app.ApplicationServices.GetRequiredService<ProductService>();
-                    MockDataInitializer.Initialize(customerService, orderService, orderDetailService, productService);
+                    
+                    // Initialize data
+                    using (var scope = app.ApplicationServices.CreateScope())
+                    {
+                        var dbContext = scope.ServiceProvider.GetRequiredService<EcommerceContext>();
+                        dbContext.Database.EnsureCreated();
+                        
+                        var customerService = scope.ServiceProvider.GetRequiredService<CustomerService>();
+                        var orderService = scope.ServiceProvider.GetRequiredService<OrderService>();
+                        var orderDetailService = scope.ServiceProvider.GetRequiredService<OrderDetailService>();
+                        var productService = scope.ServiceProvider.GetRequiredService<ProductService>();
+                        MockDataInitializer.Initialize(customerService, orderService, orderDetailService, productService);
+                    }
+                    
                     app.UseSwagger();
                     app.UseSwaggerUI(c =>
                     {
