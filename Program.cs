@@ -28,6 +28,7 @@ public class Program
                     services.AddSingleton<OrderService>();
                     services.AddSingleton<OrderDetailService>();
                     services.AddSingleton<ProductService>();
+                    services.AddSingleton<UserService>();
                 });
                 webBuilder.Configure((context, app) =>
                 {
