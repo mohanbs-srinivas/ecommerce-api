@@ -7,7 +7,7 @@ namespace ecommerce_api.Data
 {
     public class MockDataInitializer
     {
-        public static void Initialize(CustomerService customerService, OrderService orderService, OrderDetailService orderDetailService, ProductService productService)
+        public static void Initialize(CustomerService customerService, OrderService orderService, OrderDetailService orderDetailService, ProductService productService, UserService userService)
         {
             var customers = new List<Customer>
             {
@@ -33,6 +33,12 @@ namespace ecommerce_api.Data
                 new OrderDetail { Id = 2, OrderId = 2, ProductId = 2, Quantity = 1, Price = 699.99m }
             };
 
+            var users = new List<UserRegistrationDto>
+            {
+                new UserRegistrationDto { Name = "Library Admin", Email = "admin@library.com", Password = "AdminPass123" },
+                new UserRegistrationDto { Name = "Member One", Email = "member1@library.com", Password = "MemberPass456" }
+            };
+
             foreach (var customer in customers)
             {
                 customerService.CreateCustomerAsync(customer).Wait();
@@ -51,6 +57,11 @@ namespace ecommerce_api.Data
             foreach (var orderDetail in orderDetails)
             {
                 orderDetailService.CreateOrderDetailAsync(orderDetail).Wait();
+            }
+
+            foreach (var user in users)
+            {
+                userService.RegisterUserAsync(user).Wait();
             }
         }
     }

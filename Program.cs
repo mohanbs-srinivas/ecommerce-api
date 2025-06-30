@@ -47,7 +47,8 @@ public class Program
                     var orderService = app.ApplicationServices.GetRequiredService<OrderService>();
                     var orderDetailService = app.ApplicationServices.GetRequiredService<OrderDetailService>();
                     var productService = app.ApplicationServices.GetRequiredService<ProductService>();
-                    MockDataInitializer.Initialize(customerService, orderService, orderDetailService, productService);
+                    var userService = app.ApplicationServices.GetRequiredService<UserService>();
+                    MockDataInitializer.Initialize(customerService, orderService, orderDetailService, productService, userService);
                     app.UseSwagger();
                     app.UseSwaggerUI(c =>
                     {
