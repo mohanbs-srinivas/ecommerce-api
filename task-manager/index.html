@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <meta name="description" content="A modern, responsive task management application">
+    
+    <!-- External Dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Local Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Main Application Container -->
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <i class="fas fa-tasks" aria-hidden="true"></i>
+                    Task Manager
+                </h1>
+                <p class="app-subtitle">Organize your tasks efficiently</p>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Task Input Section -->
+            <section class="task-input-section">
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        id="taskInput" 
+                        class="task-input"
+                        placeholder="Add a new task..." 
+                        maxlength="500"
+                        aria-label="New task input"
+                    >
+                    <button 
+                        id="addTaskBtn" 
+                        class="add-task-btn"
+                        aria-label="Add task"
+                        title="Add Task (Enter)"
+                    >
+                        <i class="fas fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section class="stats-section">
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalTasks">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="pendingTasks">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="completedTasks">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filter Controls -->
+            <section class="filter-section">
+                <div class="filter-container">
+                    <button 
+                        class="filter-btn active" 
+                        data-filter="all"
+                        aria-label="Show all tasks"
+                    >
+                        <i class="fas fa-list" aria-hidden="true"></i>
+                        All
+                    </button>
+                    <button 
+                        class="filter-btn" 
+                        data-filter="pending"
+                        aria-label="Show pending tasks"
+                    >
+                        <i class="fas fa-clock" aria-hidden="true"></i>
+                        Pending
+                    </button>
+                    <button 
+                        class="filter-btn" 
+                        data-filter="completed"
+                        aria-label="Show completed tasks"
+                    >
+                        <i class="fas fa-check" aria-hidden="true"></i>
+                        Completed
+                    </button>
+                </div>
+            </section>
+
+            <!-- Task List Section -->
+            <section class="task-list-section">
+                <div id="taskList" class="task-list" role="list" aria-label="Task list">
+                    <!-- Tasks will be dynamically inserted here -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <div class="empty-state-content">
+                        <i class="fas fa-clipboard-list empty-state-icon" aria-hidden="true"></i>
+                        <h3 class="empty-state-title">No tasks found</h3>
+                        <p class="empty-state-message">Get started by adding your first task above.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Import/Export Section -->
+            <section class="import-export-section">
+                <div class="import-export-container">
+                    <button 
+                        id="exportBtn" 
+                        class="export-btn"
+                        aria-label="Export tasks to JSON"
+                        title="Export Tasks"
+                    >
+                        <i class="fas fa-download" aria-hidden="true"></i>
+                        Export
+                    </button>
+                    <input 
+                        type="file" 
+                        id="importInput" 
+                        class="import-input"
+                        accept=".json"
+                        aria-label="Import tasks from JSON file"
+                        style="display: none;"
+                    >
+                    <button 
+                        id="importBtn" 
+                        class="import-btn"
+                        aria-label="Import tasks from JSON"
+                        title="Import Tasks"
+                    >
+                        <i class="fas fa-upload" aria-hidden="true"></i>
+                        Import
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div id="editModal" class="modal" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+        <div class="modal-overlay" aria-hidden="true"></div>
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="editModalTitle" class="modal-title">Edit Task</h2>
+                <button 
+                    id="closeModalBtn" 
+                    class="modal-close-btn"
+                    aria-label="Close modal"
+                    title="Close (Escape)"
+                >
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </header>
+            <div class="modal-body">
+                <label for="editTaskInput" class="edit-label">Task Text:</label>
+                <textarea 
+                    id="editTaskInput" 
+                    class="edit-input"
+                    maxlength="500"
+                    rows="3"
+                    aria-describedby="editHelpText"
+                ></textarea>
+                <small id="editHelpText" class="help-text">Maximum 500 characters</small>
+            </div>
+            <footer class="modal-footer">
+                <button 
+                    id="cancelEditBtn" 
+                    class="cancel-btn"
+                    aria-label="Cancel editing"
+                >
+                    Cancel
+                </button>
+                <button 
+                    id="saveEditBtn" 
+                    class="save-btn"
+                    aria-label="Save changes"
+                >
+                    <i class="fas fa-save" aria-hidden="true"></i>
+                    Save
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal" role="dialog" aria-labelledby="confirmModalTitle" aria-hidden="true">
+        <div class="modal-overlay" aria-hidden="true"></div>
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 id="confirmModalTitle" class="modal-title">Confirm Action</h2>
+            </header>
+            <div class="modal-body">
+                <p id="confirmMessage" class="confirm-message"></p>
+            </div>
+            <footer class="modal-footer">
+                <button 
+                    id="cancelConfirmBtn" 
+                    class="cancel-btn"
+                    aria-label="Cancel action"
+                >
+                    Cancel
+                </button>
+                <button 
+                    id="confirmActionBtn" 
+                    class="confirm-btn"
+                    aria-label="Confirm action"
+                >
+                    Confirm
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast" role="alert" aria-live="polite">
+        <div class="toast-content">
+            <i class="toast-icon" aria-hidden="true"></i>
+            <span class="toast-message"></span>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
