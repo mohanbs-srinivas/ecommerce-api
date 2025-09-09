@@ -30,7 +30,9 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
-[Ll]ogs/
+# Include Logs directory but exclude log files
+Logs/*.txt
+Logs/*.log
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
