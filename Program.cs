@@ -1,5 +1,6 @@
 using ecommerce_api.Data;
 using ecommerce_api.Services;
+using ecommerce_api.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +20,11 @@ public class Program
             {
                 webBuilder.ConfigureServices((context, services) =>
                 {
-                    services.AddControllers();
+                    services.AddControllers(options =>
+                    {
+                        // Add global exception filter for error logging
+                        options.Filters.Add<ErrorLoggingFilter>();
+                    });
                     services.AddSwaggerGen(c =>
                     {
                         c.SwaggerDoc("v1", new OpenApiInfo { Title = "E-commerce API", Version = "v1" });
@@ -28,14 +33,25 @@ public class Program
                     services.AddSingleton<OrderService>();
                     services.AddSingleton<OrderDetailService>();
                     services.AddSingleton<ProductService>();
+                    
+                    // Register file logger for error logging
+                    services.AddSingleton<IFileLogger, FileLogger>();
+                    services.AddSingleton<ErrorLoggingFilter>();
                 });
                 webBuilder.Configure((context, app) =>
                 {
                     var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
+                    
+                    // Add global exception handler middleware for error logging
+                    // This runs first to ensure all errors are logged
+                    app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+                    
                     if (env.IsDevelopment())
                     {
+                        // Show detailed error page in development
                         app.UseDeveloperExceptionPage();
                     }
+                    
                     app.UseRouting();
                     app.UseAuthorization();
                     app.UseEndpoints(endpoints =>
