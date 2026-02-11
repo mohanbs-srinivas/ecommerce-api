@@ -53,28 +53,28 @@ namespace ecommerce_api.Logging
         }
 
         /// <summary>
-        /// Generates the log file name based on current date
+        /// Generates the log file name based on current date (UTC)
         /// </summary>
         /// <returns>Log file name in format: error-log-YYYY-MM-DD.txt</returns>
         private string GetDailyLogFileName()
         {
-            var date = DateTime.Now.ToString("yyyy-MM-dd");
+            var date = DateTime.UtcNow.ToString("yyyy-MM-dd");
             return $"error-log-{date}.txt";
         }
 
         /// <summary>
-        /// Formats the log entry with timestamp, level, message, and stack trace
+        /// Formats the log entry with timestamp (UTC), level, message, and stack trace
         /// </summary>
         /// <param name="message">Error message</param>
         /// <param name="exception">Exception object</param>
         /// <returns>Formatted log entry string</returns>
         private string FormatLogEntry(string message, Exception exception)
         {
-            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            var timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             var separator = new string('-', 80);
             
             var logEntry = $"{separator}\n";
-            logEntry += $"Timestamp: {timestamp}\n";
+            logEntry += $"Timestamp (UTC): {timestamp}\n";
             logEntry += $"Level: Error\n";
             logEntry += $"Message: {message}\n";
             

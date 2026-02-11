@@ -8,6 +8,7 @@ This is a simple e-commerce API built using .NET 8. The API provides CRUD operat
 - **Products**: Manage product details including creation, retrieval, updating, and deletion.
 - **Orders**: Handle order processing with CRUD operations.
 - **Order Details**: Manage details of each order, including product quantities and prices.
+- **Error Logging**: Automatic error logging to daily text files with detailed exception information.
 
 ## Technologies Used
 
@@ -55,6 +56,57 @@ http://localhost:5000/swagger
 ## Mock Data
 
 The application includes a `MockDataInitializer` class that seeds the database with mock data for testing purposes. This can be useful for development and testing without needing a real database setup.
+
+## Error Logging
+
+The application includes a robust error logging mechanism that automatically logs all unhandled exceptions to daily text files.
+
+### Features
+
+- **Daily Log Rotation**: Log files are created daily with the format `error-log-YYYY-MM-DD.txt` in the `logs` directory.
+- **Automatic Logging**: All unhandled exceptions in API controllers are automatically logged via the `ErrorLoggingFilter`.
+- **Detailed Information**: Each log entry includes:
+  - Timestamp (with milliseconds)
+  - Log Level (Error)
+  - Exception message
+  - Exception type
+  - Full stack trace
+  - Inner exception details (if present)
+- **Thread-Safe**: The logger uses file locking to ensure thread-safe writes.
+
+### Manual Logging
+
+You can also manually log errors by injecting `IFileLogger` into your controllers or services:
+
+```csharp
+public class MyController : ControllerBase
+{
+    private readonly IFileLogger _logger;
+
+    public MyController(IFileLogger logger)
+    {
+        _logger = logger;
+    }
+
+    [HttpGet]
+    public IActionResult MyAction()
+    {
+        try
+        {
+            // Your code here
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Custom error message", ex);
+            return StatusCode(500, "An error occurred");
+        }
+    }
+}
+```
+
+### Log File Location
+
+Error logs are stored in the `logs` directory in the application root. This directory is automatically created if it doesn't exist and is excluded from version control via `.gitignore`.
 
 ## Contributing
 

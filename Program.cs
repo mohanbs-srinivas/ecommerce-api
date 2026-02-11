@@ -36,7 +36,6 @@ public class Program
                     
                     // Register file logger for error logging
                     services.AddSingleton<IFileLogger, FileLogger>();
-                    services.AddSingleton<ErrorLoggingFilter>();
                 });
                 webBuilder.Configure((context, app) =>
                 {

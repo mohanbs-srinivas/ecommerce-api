@@ -54,7 +54,6 @@ namespace ecommerce_api.Logging
             var response = new
             {
                 error = "An error occurred while processing your request.",
-                message = exception.Message,
                 statusCode = context.Response.StatusCode
             };
 
