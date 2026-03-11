@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Commerce API</title>
+
+    <!-- Apply theme BEFORE any rendering to prevent flash of unstyled content (FOUC) -->
+    <script>
+        (function () {
+            var stored = localStorage.getItem('theme-preference');
+            var theme = stored === 'dark' || stored === 'light'
+                ? stored
+                : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <a href="/" class="navbar__brand">
+            <span class="navbar__brand-icon" aria-hidden="true">🛒</span>
+            E-Commerce API
+        </a>
+
+        <ul class="navbar__nav">
+            <li><a href="/swagger">API Docs</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+
+        <div class="navbar__actions">
+            <!-- Theme Toggle Button -->
+            <button
+                id="theme-toggle"
+                class="theme-toggle"
+                type="button"
+                aria-label="Switch to dark mode"
+                aria-pressed="false"
+                title="Toggle light/dark mode"
+                onclick="toggleTheme()"
+            >
+                🌙
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+
+            <!-- Hero Section -->
+            <section class="hero" aria-labelledby="hero-title">
+                <span class="badge">🚀 REST API</span>
+                <h1 id="hero-title" class="hero__title">E-Commerce API Platform</h1>
+                <p class="hero__subtitle">
+                    A robust backend API for managing products, customers, orders, and order details.
+                    Explore the endpoints below or visit the interactive API documentation.
+                </p>
+                <a href="/swagger" class="btn btn--primary">
+                    📖 Explore API Docs
+                </a>
+            </section>
+
+            <!-- Products Section -->
+            <section id="products" aria-labelledby="products-title">
+                <h2 id="products-title" class="section-title">Featured Products</h2>
+                <div class="card-grid" id="products-grid">
+                    <!-- Products loaded dynamically -->
+                    <div class="card">
+                        <div class="card__icon">👟</div>
+                        <div class="card__title">Running Shoes</div>
+                        <div class="card__price">$89.99</div>
+                        <div class="card__description">Lightweight and durable running shoes for everyday training.</div>
+                        <button class="btn btn--primary" type="button">Add to Cart</button>
+                    </div>
+                    <div class="card">
+                        <div class="card__icon">🎧</div>
+                        <div class="card__title">Wireless Headphones</div>
+                        <div class="card__price">$149.00</div>
+                        <div class="card__description">Premium noise-cancelling headphones with 30-hour battery life.</div>
+                        <button class="btn btn--primary" type="button">Add to Cart</button>
+                    </div>
+                    <div class="card">
+                        <div class="card__icon">💻</div>
+                        <div class="card__title">Laptop Stand</div>
+                        <div class="card__price">$45.00</div>
+                        <div class="card__description">Adjustable aluminium stand to improve your desk ergonomics.</div>
+                        <button class="btn btn--primary" type="button">Add to Cart</button>
+                    </div>
+                    <div class="card">
+                        <div class="card__icon">📱</div>
+                        <div class="card__title">Phone Case</div>
+                        <div class="card__price">$19.99</div>
+                        <div class="card__description">Slim, shock-resistant case with military-grade drop protection.</div>
+                        <button class="btn btn--primary" type="button">Add to Cart</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" aria-labelledby="about-title">
+                <h2 id="about-title" class="section-title">About This API</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card__icon">📦</div>
+                        <div class="card__title">Products</div>
+                        <div class="card__description">Full CRUD operations for product catalogue management.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card__icon">👥</div>
+                        <div class="card__title">Customers</div>
+                        <div class="card__description">Manage customer accounts and profile information.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card__icon">🛍️</div>
+                        <div class="card__title">Orders</div>
+                        <div class="card__description">Create and track customer orders end-to-end.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card__icon">📋</div>
+                        <div class="card__title">Order Details</div>
+                        <div class="card__description">Granular line-item management within each order.</div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 E-Commerce API Platform. Built with ASP.NET Core.</p>
+    </footer>
+
+    <!-- Theme utility (must be loaded before page interactions) -->
+    <script src="/js/theme.js"></script>
+
+</body>
+</html>
