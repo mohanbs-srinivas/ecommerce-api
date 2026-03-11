@@ -36,6 +36,8 @@ public class Program
                     {
                         app.UseDeveloperExceptionPage();
                     }
+                    app.UseDefaultFiles();
+                    app.UseStaticFiles();
                     app.UseRouting();
                     app.UseAuthorization();
                     app.UseEndpoints(endpoints =>
